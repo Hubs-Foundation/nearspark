@@ -18,6 +18,16 @@ provider:
     quota:
       limit: 10000000
       period: MONTH
+  endpointType: private
+  resourcePolicy:
+    - Effect: Allow
+      Principal: "*"
+      Action: execute-api:Invoke
+      Resource:
+        - execute-api:/*/*/*
+      Condition:
+        StringEquals:
+          aws:sourceVpc: ${file(config.json):nearspark-vpc-id}
 
 functions:
   thumbnail:
