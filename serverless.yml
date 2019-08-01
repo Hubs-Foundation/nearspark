@@ -42,6 +42,61 @@ functions:
                 url: true
           contentHandling: CONVERT_TO_BINARY
 
+resources:
+  Resources:
+    NearsparkCloudfrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          Origins:
+            - Id: ApiGateway
+              DomainName:
+                Fn::Join:
+                  - ""
+                  - - Ref: ApiGatewayRestApi
+                    - ".execute-api."
+                    - Ref: AWS::Region
+                    - ".amazonaws.com"
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: https-only
+                OriginSSLProtocols: [ "TLSv1", "TLSv1.1", "TLSv1.2" ]
+              OriginPath:
+                Fn::Join:
+                  - ""
+                  - - "/"
+                  - ${self:provider.stage}
+          Enabled: true
+          HttpVersion: http2
+          PriceClass: PriceClass_All
+          Aliases:
+            Fn::Join:
+              - "."
+              - ${file(config.json):nearspark-dns-prefix}
+              - ${file(config.json):nearspark-domain}
+          DefaultCacheBehavior:
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            CachedMethods:
+              - GET
+              - HEAD
+            TargetOriginId: ApiGateway
+            ForwardedValues:
+              QueryString: true
+              Headers: []
+              Cookies:
+                Forward: none
+            ViewerProtocolPolicy: redirect-to-https
+            MinTTL: '0'
+            DefaultTTL: '3600'
+
+          ## The certificate to use when viewers use HTTPS to request objects.
+          ViewerCertificate:
+            CloudFrontDefaultCertificate: 'true'
+
 plugins:
   - serverless-offline
   - serverless-apigw-binary
@@ -51,3 +106,8 @@ custom:
   apigwBinary:
     types:
       - '*/*'
+
+Outputs:
+  NearsparkCloudfrontDistribution:
+    Value:
+      Fn::GetAtt: [ NearsparkCloudfrontDistribution, DomainName ]
