@@ -57,7 +57,7 @@ resources:
         AliasTarget:
           DNSName:
             Fn::GetAtt: [ NearsparkCloudfrontDistribution, DomainName ]
-            HostedZoneId: Z2FDTNDATAQYW2
+          HostedZoneId: Z2FDTNDATAQYW2
 
     NearsparkCloudfrontDistribution:
       Type: AWS::CloudFront::Distribution
