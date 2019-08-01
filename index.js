@@ -4,8 +4,8 @@ const sharp = require("sharp");
 module.exports.handler = function handler(event, context, callback) {
   const queryStringParameters = event.queryStringParameters || {};
   const {
-    width,
-    height,
+    w,
+    h,
     fit,
     position,
     gravity,
@@ -15,7 +15,9 @@ module.exports.handler = function handler(event, context, callback) {
   } = queryStringParameters;
 
   const base64url = event.pathParameters.url;
-  const url = new Buffer.from(base64url, "base64").toString();
+  const url = decodeURIComponent(
+    new Buffer.from(base64url, "base64").toString()
+  );
   const sharpFit = fit || "cover";
 
   let sharpPosition = sharp.position.centre;
@@ -33,8 +35,8 @@ module.exports.handler = function handler(event, context, callback) {
   request.get({ url, encoding: null }, (_, __, body) => {
     sharp(body)
       .resize({
-        width: parseInt(width),
-        height: parseInt(height),
+        width: parseInt(w),
+        height: parseInt(h),
         fit: sharpFit,
         position: sharpPosition,
         background: sharpBackground,
