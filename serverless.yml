@@ -87,7 +87,7 @@ resources:
           Aliases:
             -
               Fn::Join:
-                - "."
+                - ""
                 - - ${file(config.json):nearspark-dns-prefix}
                   - ${file(config.json):nearspark-domain}
           DefaultCacheBehavior:
