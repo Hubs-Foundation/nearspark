@@ -23,22 +23,6 @@ Resources:
                   in: path
                   required: true
                   type: string
-              x-amazon-apigateway-integration:
-                httpMethod: GET
-                type: aws_proxy
-                uri:
-                  Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ThumbnailFunction.Arn}/invocations
-              requestTemplates:
-                "application/json": "{\"url\": \"$input.params('url')\"}"
-          "/thumbnail/{url}":
-            get:
-              consumes:
-                - "application/json"
-              parameters:
-                - name: url
-                  in: path
-                  required: true
-                  type: string
                 - name: width
                   in: query
                   required: true
