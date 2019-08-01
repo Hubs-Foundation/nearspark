@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs10.x
   region: us-west-1
-  stage: public
+  stage: ${opt:stage, 'dev'}
   stackName: nearspark-${opt:stage, 'dev'}
   timeout: 15
   role: ${file(config.json):nearspark-iam-role}
@@ -44,6 +44,20 @@ functions:
 
 resources:
   Resources:
+    NearsparkCloudfrontDNS:
+      Type: AWS::Route53::RecordSet
+      Properties:
+        Name:
+          Fn::Join:
+            - "."
+            - - ${file(config.json):nearspark-dns-prefix}
+              - ${file(config.json):nearspark-domain}
+        Type: A
+        AliasTarget:
+          HostedZoneId: ${file(config.json):nearspark-zone-id}
+          DNSName:
+            Fn::GetAtt: [ NearsparkCloudfrontDistribution, DomainName ]
+
     NearsparkCloudfrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
@@ -66,15 +80,16 @@ resources:
                 Fn::Join:
                   - ""
                   - - "/"
-                  - ${self:provider.stage}
+                    - ${self:provider.stage}
           Enabled: true
           HttpVersion: http2
           PriceClass: PriceClass_All
           Aliases:
-            Fn::Join:
-              - "."
-              - ${file(config.json):nearspark-dns-prefix}
-              - ${file(config.json):nearspark-domain}
+            -
+              Fn::Join:
+                - "."
+                - - ${file(config.json):nearspark-dns-prefix}
+                  - ${file(config.json):nearspark-domain}
           DefaultCacheBehavior:
             AllowedMethods:
               - GET
@@ -93,9 +108,10 @@ resources:
             MinTTL: '0'
             DefaultTTL: '3600'
 
-          ## The certificate to use when viewers use HTTPS to request objects.
           ViewerCertificate:
-            CloudFrontDefaultCertificate: 'true'
+            AcmCertificateArn: ${file(config.json):nearspark-cert-arn}
+            SslSupportMethod: sni-only
+            # CloudFrontDefaultCertificate: 'true'
 
 plugins:
   - serverless-offline
