@@ -1,2 +1,1 @@
-# nearspark
-AWS lambda service for creating image thumbnails
+AWS Lambda function for generating image thumbnails.

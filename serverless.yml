@@ -1,0 +1,43 @@
+service: nearspark
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: us-west-1
+  stage: public
+  stackName: nearspark-${opt:stage, 'dev'}
+  timeout: 15
+  role: ${file(config.json):nearspark-iam-role}
+  deploymentBucket:
+    name: ${file(config.json):nearspark-bucket-id}
+  vpc:
+    securityGroupIds:
+      - ${file(config.json):nearspark-security-group}
+    subnetIds: ${file(config.json):nearspark-subnet-ids}
+  usagePlan:
+    quota:
+      limit: 10000000
+      period: MONTH
+
+functions:
+  thumbnail:
+    handler: index.handler
+    events:
+      - http:
+          method: get
+          path: "thumbnail/{url}"
+          request:
+            parameters:
+              paths:
+                url: true
+          contentHandling: CONVERT_TO_BINARY
+
+plugins:
+  - serverless-offline
+  - serverless-apigw-binary
+  - serverless-apigwy-binary
+
+custom:
+  apigwBinary:
+    types:
+      - '*/*'
