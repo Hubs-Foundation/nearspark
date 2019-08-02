@@ -18,16 +18,12 @@ provider:
     quota:
       limit: 10000000
       period: MONTH
-  endpointType: private
   resourcePolicy:
     - Effect: Allow
       Principal: "*"
       Action: execute-api:Invoke
       Resource:
         - execute-api:/*/*/*
-      Condition:
-        StringEquals:
-          aws:sourceVpc: ${file(config.json):nearspark-vpc-id}
 
 functions:
   thumbnail:
@@ -49,7 +45,7 @@ resources:
       Properties:
         Name:
           Fn::Join:
-            - "."
+            - ""
             - - ${file(config.json):nearspark-dns-prefix}
               - ${file(config.json):nearspark-domain}
         HostedZoneId: ${file(config.json):nearspark-zone-id}
