@@ -6,6 +6,7 @@ provider:
   region: us-west-1
   stage: ${opt:stage, 'dev'}
   stackName: nearspark-${opt:stage, 'dev'}
+  memorySize: 128
   timeout: 15
   role: ${file(config.json):nearspark-iam-role}
   deploymentBucket:
