@@ -1,6 +1,6 @@
 {
   "name": "nearspark",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Generate image thumbnails",
   "main": "index.js",
   "scripts": {
