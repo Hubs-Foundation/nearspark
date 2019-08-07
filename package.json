@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Generate image thumbnails",
   "main": "index.js",
+  "scripts": {
+    "release": "np && git push"
+  },
   "keywords": [],
   "author": "",
   "license": "MPL",
@@ -20,8 +23,5 @@
     "serverless-apigw-binary": "^0.4.4",
     "serverless-apigwy-binary": "^1.0.0",
     "serverless-offline": "^4.9.4"
-  },
-  "scripts": {
-    "release": "npm run build && git commit --allow-empty -am 'update builds' && git push && np && git push"
   }
 }
