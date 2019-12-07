@@ -30,6 +30,9 @@ pushd $HUBS_OPS_PATH/terraform
 # This command must be used to install a lambda-compatible version of sharp
 ./grunt_local.sh output nearspark $ENVIRONMENT -json | jq 'with_entries(.value |= .value)' > $DIR/config.json
 popd
+mv node_modules node_modules_tmp
 env npm_config_arch=x64 npm_config_platform=linux npm_config_target=10.16.1 npm install --save sharp
 sls $COMMAND --stage $ENVIRONMENT
+rm -rf node_modules
+mv node_modules_tmp node_modules
 rm config.json
