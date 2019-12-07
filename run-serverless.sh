@@ -28,8 +28,8 @@ ENVIRONMENT=$2
 DIR=$(pwd)
 pushd $HUBS_OPS_PATH/terraform
 # This command must be used to install a lambda-compatible version of sharp
-env npm_config_arch=x64 npm_config_platform=linux npm_config_target=10.16.1 npm install --save sharp
 ./grunt_local.sh output nearspark $ENVIRONMENT -json | jq 'with_entries(.value |= .value)' > $DIR/config.json
 popd
+env npm_config_arch=x64 npm_config_platform=linux npm_config_target=10.16.1 npm install --save sharp
 sls $COMMAND --stage $ENVIRONMENT
 rm config.json
