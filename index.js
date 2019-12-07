@@ -14,7 +14,13 @@ module.exports.handler = function handler(event, context, callback) {
     withoutEnlargement
   } = queryStringParameters;
 
-  const base64url = event.pathParameters.url;
+  let base64url = event.pathParameters.url;
+
+  // Drop extension, if present (for compatibility with imgproxy, which has extension passed for CDN caching)
+  if (base64url.includes(".")) {
+    base64url = base64url.substring(0, base64url.indexOf("."));
+  }
+
   const url = decodeURIComponent(
     new Buffer.from(base64url, "base64").toString()
   );
