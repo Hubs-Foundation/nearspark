@@ -11,7 +11,7 @@
   "license": "MPL",
   "dependencies": {
     "request": "^2.88.0",
-    "sharp": "^0.23.0"
+    "sharp": "^0.23.4"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

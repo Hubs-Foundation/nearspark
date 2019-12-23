@@ -2,88 +2,32 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   Nearspark
-Globals:
-  Function:
-    Timeout: 15
+
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: nearspark
+    Description: Image resizing services for Hubs Cloud
+    Author: Mozilla
+    SpdxLicenseId: MPL-2.0
+    LicenseUrl: LICENSE
+    ReadmeUrl: README.md
+    SemanticVersion: 0.1.0
+
+Parameters:
+  NearsparkRoleArn:
+    Type: String
 
 Resources:
-  ThumbnailApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: prod
-      DefinitionBody:
-        swagger: 2.0
-        paths:
-          "/thumbnail/{url}":
-            get:
-              consumes:
-                - "application/json"
-              parameters:
-                - name: url
-                  in: path
-                  required: true
-                  type: string
-                - name: width
-                  in: query
-                  required: true
-                  type: number
-                - name: height
-                  in: query
-                  required: true
-                  type: number
-                - name: fit
-                  in: query
-                  required: false
-                  type: string
-                - name: position
-                  in: query
-                  required: false
-                  type: string
-                - name: gravity
-                  in: query
-                  required: false
-                  type: string
-                - name: strategy
-                  in: query
-                  required: false
-                  type: string
-                - name: background
-                  in: query
-                  required: false
-                  type: string
-                - name: withoutEnlargement
-                  in: query
-                  required: false
-                  type: boolean
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri:
-                  Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ThumbnailFunction.Arn}/invocations
-              requestTemplates:
-                "application/json": "{\"url\": \"$input.params('url')\"}"
-
   ThumbnailFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
+      CodeUri: nearspark.zip
       Handler: index.thumbnail
       Runtime: nodejs10.x
-      Events:
-        Thumbnail:
-          Type: Api
-          Properties:
-            Path: /thumbnail
-            Method: get
-            ContentHandling: CONVERT_TO_BINARY
+      Timeout: 30
+      MemorySize: 512
 
 Outputs:
-  ThumbnailApi:
-    Description: "API Gateway endpoint URL for Prod stage for Thumbnail function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/thumbnail/"
-  ThumbnailFunction:
+  NearsparkThumbnailFunctionArn:
     Description: "Thumbnail Lambda Function ARN"
     Value: !GetAtt ThumbnailFunction.Arn
-  ThumbnailFunctionIamRole:
-    Description: "Implicit IAM Role created for Thumbnail function"
-    Value: !GetAtt ThumbnailFunctionRole.Arn
