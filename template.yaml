@@ -20,11 +20,11 @@ Parameters:
 Resources:
   ThumbnailFunction:
     Type: AWS::Serverless::Function
-    Role:
-      Ref: NearsparkRoleArn
     Properties:
+      Role:
+        Ref: NearsparkRoleArn
       CodeUri: nearspark.zip
-      Handler: index.thumbnail
+      Handler: index.handler
       Runtime: nodejs10.x
       Timeout: 30
       MemorySize: 512
