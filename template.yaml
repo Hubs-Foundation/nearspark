@@ -20,6 +20,8 @@ Parameters:
 Resources:
   ThumbnailFunction:
     Type: AWS::Serverless::Function
+    Role:
+      Ref: NearsparkRoleArn
     Properties:
       CodeUri: nearspark.zip
       Handler: index.thumbnail
