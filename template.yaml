@@ -12,6 +12,7 @@ Metadata:
     LicenseUrl: LICENSE
     ReadmeUrl: README.md
     SemanticVersion: 0.1.0
+    SourceCodeUrl: https://github.com/mozilla/nearspark
 
 Parameters:
   NearsparkRoleArn:
