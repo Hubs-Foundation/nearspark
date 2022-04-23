@@ -31,7 +31,7 @@ BUCKET_REGION=$(./grunt_local.sh output ret $ENVIRONMENT -json | jq 'with_entrie
 popd
 
 mv node_modules node_modules_tmp
-env npm_config_arch=x64 npm_config_platform=linux npm_config_target=10.16.1 npm ci
+env npm_config_arch=x64 npm_config_platform=linux npm_config_target=14.18.1 npm ci
 zip -9 -y -r ${NAME}.zip *.js node_modules
 sam package --region $BUCKET_REGION --template-file template.yaml --output-template-file template-packaged.yaml --s3-bucket $BUCKET
 
