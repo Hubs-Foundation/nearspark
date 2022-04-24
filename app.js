@@ -23,7 +23,7 @@ app.get("/thumbnail/:b64url", function(req, res) {
       res
         .status(callback.statusCode)
         .header(callback.headers)
-        .body(callback.body)
+        .send(callback.body)
     }
   );
 });
@@ -43,7 +43,7 @@ app.get("/thumbnail", function(req, res) {
       res
         .status(callback.statusCode)
         .header(callback.headers)
-        .body(callback.body)
+        .send(callback.body)
     }
   );
 });
