@@ -8,7 +8,7 @@ const app = express();
 // });
 
 app.get("/thumbnail/:b64url", function(req, res) {
-  console.log("req",req);
+  console.log("req.url",req.url);
 
   lambda.handler(
     {
@@ -20,17 +20,15 @@ app.get("/thumbnail/:b64url", function(req, res) {
     null,
     async function(something, callback) {
       console.log("callback: ", callback.statusCode, callback.headers);
-      res.removeHeader("Content-Type")
       res
         .status(callback.statusCode)
         .header(callback.headers)
-        .send(callback.body);
+        .body(callback.body)
     }
   );
 });
 app.get("/thumbnail", function(req, res) {
-  console.log(req.url);
-  console.log(req.query);
+  console.log("req.url",req.url);
 
   lambda.handler(
     {
@@ -42,11 +40,10 @@ app.get("/thumbnail", function(req, res) {
     null,
     async function(something, callback) {
       console.log("callback: ", callback.statusCode, callback.headers);
-      res.removeHeader("Content-Type")
       res
         .status(callback.statusCode)
         .header(callback.headers)
-        .send(callback.body);
+        .body(callback.body)
     }
   );
 });
