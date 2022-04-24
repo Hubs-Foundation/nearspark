@@ -8,8 +8,7 @@ const app = express();
 // });
 
 app.get("/thumbnail/:b64url", function(req, res) {
-  console.log(req.url);
-  console.log(req.query);
+  console.log("req",req);
 
   lambda.handler(
     {
@@ -20,7 +19,8 @@ app.get("/thumbnail/:b64url", function(req, res) {
     },
     null,
     async function(something, callback) {
-      console.log("callback: ", callback);
+      console.log("callback: ", callback.statusCode, callback.headers);
+      res.removeHeader("Content-Type")
       res
         .status(callback.statusCode)
         .header(callback.headers)
@@ -41,7 +41,8 @@ app.get("/thumbnail", function(req, res) {
     },
     null,
     async function(something, callback) {
-      console.log("callback: ", callback);
+      console.log("callback: ", callback.statusCode, callback.headers);
+      res.removeHeader("Content-Type")
       res
         .status(callback.statusCode)
         .header(callback.headers)
