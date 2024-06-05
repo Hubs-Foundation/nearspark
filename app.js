@@ -14,7 +14,7 @@ app.get("/thumbnail/:b64url", function(req, res) {
       {
         queryStringParameters: req.query,
         pathParameters: {
-          url: req.url.replace("/thumbnail/", "")
+          url: req.url.replace("/thumbnail/", "").split('?')[0]
         }
       },
       null,
