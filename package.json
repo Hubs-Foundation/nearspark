@@ -2,7 +2,7 @@
   "name": "nearspark",
   "version": "0.1.0",
   "description": "Generate image thumbnails",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "release": "np && git push"
   },
@@ -10,8 +10,9 @@
   "author": "",
   "license": "MPL",
   "dependencies": {
+    "express": "^4.17.1",
     "request": "^2.88.0",
-    "sharp": "^0.23.4"
+    "sharp": "^0.29.1"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
